@@ -10,12 +10,12 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "BlocBrowser/BLCWebBrowserViewController.m"
-            timestampString = "429589683.439521"
+            timestampString = "429644096.331352"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "133"
-            endingLineNumber = "133"
-            landmarkName = "-textFieldShouldReturn:"
+            startingLineNumber = "166"
+            endingLineNumber = "166"
+            landmarkName = "-updateButtonsAndTitle"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
