@@ -49,8 +49,14 @@
       [UIColor colorWithWhite:220 / 255.0f alpha:1];
   self.textField.delegate = self;
 
-    self.awesomeToolbar = [[BLCAwesomeFloatingToolbar alloc]initWithFourTitles:@[kBLCWebBrowserBackString, kBLCWebBrowserForwardString, kBLCWebBrowserStopString, kBLCWebBrowserRefreshString]];
-    self.awesomeToolbar.delegate = self;
+  self.awesomeToolbar = [[BLCAwesomeFloatingToolbar alloc]
+      initWithFourTitles:@[
+                           kBLCWebBrowserBackString,
+                           kBLCWebBrowserForwardString,
+                           kBLCWebBrowserStopString,
+                           kBLCWebBrowserRefreshString
+                         ]];
+  self.awesomeToolbar.delegate = self;
 
   /* [mainView addSubview:self.webview];
    [mainView addSubview:self.textField];
@@ -59,11 +65,8 @@
    [mainView addSubview:self.stopButton];
    [mainView addSubview:self.reloadButton];*/
 
-  for (UIView *viewToAdd in @[
-         self.webview,
-         self.textField,
-         self.awesomeToolbar
-       ]) {
+  for (UIView *viewToAdd in
+       @[ self.webview, self.textField, self.awesomeToolbar ]) {
     [mainView addSubview:viewToAdd];
   }
 
@@ -87,16 +90,16 @@
   static CGFloat itemHeight = 50;
   CGFloat width = CGRectGetWidth(self.view.bounds);
   CGFloat browserHeight = CGRectGetHeight(self.view.bounds) - itemHeight;
-    NSLog(@"%f", width);
-    
-    CGFloat centerX;
-    centerX = width / 2;
+  NSLog(@"%f", width);
+
+  CGFloat centerX;
+  centerX = width / 2;
 
   self.textField.frame = CGRectMake(0, 0, width, itemHeight);
   self.webview.frame =
       CGRectMake(0, CGRectGetMaxY(self.textField.frame), width, browserHeight);
 
-    self.awesomeToolbar.frame = CGRectMake(centerX - 140, 100, 280, 60);
+  self.awesomeToolbar.frame = CGRectMake(centerX - 140, 100, 280, 60);
 }
 
 - (void)resetWebView {
@@ -112,20 +115,54 @@
   [self updateButtonsAndTitle];
 }
 
-
 #pragma mark - BLCAwesomeFloatingToolbarDelegate
 
-- (void) floatingToolbar:(BLCAwesomeFloatingToolbar *)toolbar didSelectButtonWithTitle:(NSString *)title {
-    if ([title isEqual:kBLCWebBrowserBackString]) {
-        [self.webview goBack];
-    } else if ([title isEqual:kBLCWebBrowserForwardString]) {
-        [self.webview goForward];
-    } else if ([title isEqual:kBLCWebBrowserStopString]) {
-        [self.webview stopLoading];
-    } else if ([title isEqual:kBLCWebBrowserRefreshString]) {
-        [self.webview reload];
+- (void)floatingToolbar:(BLCAwesomeFloatingToolbar *)toolbar
+    didSelectButtonWithTitle:(NSString *)title {
+  if ([title isEqual:kBLCWebBrowserBackString]) {
+    [self.webview goBack];
+  } else if ([title isEqual:kBLCWebBrowserForwardString]) {
+    [self.webview goForward];
+  } else if ([title isEqual:kBLCWebBrowserStopString]) {
+    [self.webview stopLoading];
+  } else if ([title isEqual:kBLCWebBrowserRefreshString]) {
+    [self.webview reload];
+  }
+}
+
+- (void) floatingToolbar:(BLCAwesomeFloatingToolbar *)toolbar didTryToPanWithOffset:(CGPoint)offset {
+    CGPoint startingPoint = toolbar.frame.origin;
+    CGPoint newPoint = CGPointMake(startingPoint.x + offset.x, startingPoint.y + offset.y);
+    
+    CGRect potentialNewFrame = CGRectMake(newPoint.x, newPoint.y, CGRectGetWidth(toolbar.frame), CGRectGetHeight(toolbar.frame));
+    
+    if (CGRectContainsRect(self.view.bounds, potentialNewFrame)) {
+        toolbar.frame = potentialNewFrame;
     }
 }
+
+- (void) floatingToolbar:(BLCAwesomeFloatingToolbar *)toolbar didTryToPinchWithOffset:(CGFloat)pinchScale {
+    ///CGPoint startingPoint = toolbar.frame.origin;
+    CGSize oldSize = self.awesomeToolbar.frame.size;
+    CGFloat newX = (oldSize.width * pinchScale);
+    CGFloat newY = (oldSize.height * pinchScale);
+    ///CGRect newFrame = self.awesomeToolbar.frame;
+    ///newFrame.size = CGSizeMake(newX, newY);
+    
+    ///CGAffineTransform transform = CGAffineTransformMakeScale(newX, newY);
+    ///toolbar.transform = transform;
+    
+    
+    CGRect scaledView = CGRectMake(self.awesomeToolbar.frame.origin.x, self.awesomeToolbar.frame.origin.y, newX, newY);
+    
+    toolbar.frame = scaledView;
+    
+    NSLog(@"Old Size.x %2F, Old Size.y %2F New size.x %2F  Newsize.y %2f", oldSize.width, oldSize.height, newX, (oldSize.height * pinchScale));
+    
+    
+}
+
+
 
 #pragma mark - UITextFieldDelegate
 
@@ -203,11 +240,18 @@
     [self.activityIndicator stopAnimating];
   }
 
-    [self.awesomeToolbar setEnabled:[self.webview canGoBack] forButtonWithTitle:kBLCWebBrowserBackString];
-    [self.awesomeToolbar setEnabled:[self.webview canGoForward] forButtonWithTitle:kBLCWebBrowserForwardString];
-    [self.awesomeToolbar setEnabled:self.frameCount > 0 forButtonWithTitle:kBLCWebBrowserStopString];
-    [self.awesomeToolbar setEnabled:self.webview.request.URL && self.frameCount == 0 forButtonWithTitle:kBLCWebBrowserRefreshString];
+  [self.awesomeToolbar setEnabled:[self.webview canGoBack]
+               forButtonWithTitle:kBLCWebBrowserBackString];
+  [self.awesomeToolbar setEnabled:[self.webview canGoForward]
+               forButtonWithTitle:kBLCWebBrowserForwardString];
+  [self.awesomeToolbar setEnabled:self.frameCount > 0
+               forButtonWithTitle:kBLCWebBrowserStopString];
+  [self.awesomeToolbar
+              setEnabled:self.webview.request.URL && self.frameCount == 0
+      forButtonWithTitle:kBLCWebBrowserRefreshString];
 }
+
+
 
 /*
 #pragma mark - Navigation
