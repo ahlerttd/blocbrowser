@@ -10,11 +10,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "BlocBrowser/BLCWebBrowserViewController.m"
-            timestampString = "430140303.908683"
+            timestampString = "430408221.089669"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "146"
-            endingLineNumber = "146"
+            startingLineNumber = "155"
+            endingLineNumber = "155"
             landmarkName = "-floatingToolbar:didTryToPinchWithOffset:"
             landmarkType = "5">
          </BreakpointContent>
@@ -26,11 +26,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "BlocBrowser/BLCAwesomeFloatingToolbar.m"
-            timestampString = "430165683.836953"
+            timestampString = "430410725.929891"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "158"
-            endingLineNumber = "158"
+            startingLineNumber = "326"
+            endingLineNumber = "326"
             landmarkName = "-pinchFired:"
             landmarkType = "5">
          </BreakpointContent>
@@ -41,13 +41,29 @@
             shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "BlocBrowser/BLCWebBrowserViewController.m"
-            timestampString = "430165654.320119"
+            filePath = "BlocBrowser/BLCAwesomeFloatingToolbar.m"
+            timestampString = "430410725.929891"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "152"
-            endingLineNumber = "152"
-            landmarkName = "-floatingToolbar:didTryToPinchWithOffset:"
+            startingLineNumber = "125"
+            endingLineNumber = "125"
+            landmarkName = "-initWithFourTitles:"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "BlocBrowser/BLCAwesomeFloatingToolbar.m"
+            timestampString = "430410725.929891"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "254"
+            endingLineNumber = "254"
+            landmarkName = "-buttonPressed:"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
