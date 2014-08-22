@@ -58,13 +58,6 @@
                          ]];
   self.awesomeToolbar.delegate = self;
 
-  /* [mainView addSubview:self.webview];
-   [mainView addSubview:self.textField];
-   [mainView addSubview:self.backButton];
-   [mainView addSubview:self.forwardButton];
-   [mainView addSubview:self.stopButton];
-   [mainView addSubview:self.reloadButton];*/
-
   for (UIView *viewToAdd in
        @[ self.webview, self.textField, self.awesomeToolbar ]) {
     [mainView addSubview:viewToAdd];
@@ -118,11 +111,6 @@
 
 #pragma mark - BLCAwesomeFloatingToolbarDelegate
 
-///- (void)floatingToolbar:(BLCAwesomeFloatingToolbar *)toolbar
-///didLongPressButton:(UIButton *)button {
-///       [self.awesomeToolbar setBackgroundColor:nil
-///       forColorButtonWithTitle:button];
-///}
 
 - (void)floatingToolbar:(BLCAwesomeFloatingToolbar *)toolbar
         didSelectButton:(UIButton *)button {
@@ -156,26 +144,13 @@
 
 - (void)floatingToolbar:(BLCAwesomeFloatingToolbar *)toolbar
     didTryToPinchWithOffset:(CGFloat)pinchScale {
-  /// CGPoint startingPoint = toolbar.frame.origin;
-  /// CGSize oldSize = self.awesomeToolbar.frame.size;
+
 
   NSLog(@"Scale %f", pinchScale);
 
   self.awesomeToolbar.transform = CGAffineTransformScale(
       self.awesomeToolbar.transform, (pinchScale), (pinchScale));
 
-  /// CGFloat newX = (oldSize.width * (pinchScale / 100));
-  /// CGFloat newY = (oldSize.height * (pinchScale / 100));
-  /// CGRect newFrame = self.awesomeToolbar.frame;
-  /// newFrame.size = CGSizeMake(newX, newY);
-
-  /// CGRect scaledView = CGRectMake(self.awesomeToolbar.frame.origin.x,
-  /// self.awesomeToolbar.frame.origin.y, newX, newY);
-
-  /// self.awesomeToolbar.frame = scaledView;
-
-  /// NSLog(@"Old Size.x %2F, Old Size.y %2F New size.x %2F  Newsize.y %2f",
-  /// oldSize.width, oldSize.height, newX, (oldSize.height * pinchScale));
 }
 
 #pragma mark - UITextFieldDelegate
