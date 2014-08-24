@@ -88,7 +88,9 @@
 				17EEF00B199419F500852302 /* Frameworks */,
 				17EEF00A199419F500852302 /* Products */,
 			);
+			indentWidth = 2;
 			sourceTree = "<group>";
+			tabWidth = 2;
 		};
 		17EEF00A199419F500852302 /* Products */ = {
 			isa = PBXGroup;

@@ -12,14 +12,8 @@
 
 @property(nonatomic, strong) NSArray *currentTitles;
 @property(nonatomic, strong) NSArray *colors;
-@property(nonatomic, strong) NSArray *labels;
 @property(nonatomic, strong) NSArray *buttons;
-@property(nonatomic, weak) UILabel *currentLabel;
-@property(nonatomic, strong) UITapGestureRecognizer *tapGesture;
-@property(nonatomic, strong) UIPanGestureRecognizer *panGesture;
-@property(nonatomic, strong) UIPinchGestureRecognizer *pinchGesture;
-@property(nonatomic, strong) UILongPressGestureRecognizer *longPress;
-@property(nonatomic, strong) UIButton *toolButton;
+
 @property(nonatomic, strong) UIButton *backButton;
 @property(nonatomic, strong) UIButton *forwardButton;
 @property(nonatomic, strong) UIButton *stopButton;
@@ -29,96 +23,105 @@
 
 @implementation BLCAwesomeFloatingToolbar
 
+#pragma mark - Setup
+
 - (instancetype)initWithFourTitles:(NSArray *)titles {
   if (self = [super init]) {
     self.currentTitles = titles;
 
-    NSLog(@"Titles %@ ", titles);
-
-    self.colors = @[
+  self.colors = @[
       [UIColor redColor],
       [UIColor blueColor],
       [UIColor greenColor],
       [UIColor yellowColor]
     ];
+  
+    [self setupSubviews];
+    [self setupGestures];
 
-    UIButton *buttonTopLeft = [UIButton buttonWithType:UIButtonTypeSystem];
-    buttonTopLeft.backgroundColor = [UIColor redColor];
-    buttonTopLeft.alpha = .25;
-    [buttonTopLeft setTitle:@"Back" forState:UIControlStateNormal];
-    [buttonTopLeft addTarget:self
-                      action:@selector(buttonPressed:)
-            forControlEvents:UIControlEventTouchUpInside];
-    self.longPress = [[UILongPressGestureRecognizer alloc]
-        initWithTarget:self
-                action:@selector(longPressFired:)];
-    [self addGestureRecognizer:self.longPress];
-    self.backButton = buttonTopLeft;
-    [self addSubview:self.backButton];
+    self.buttons = @[self.backButton, self.forwardButton, self.stopButton, self.refreshButton];
+  }
+   return self;
+}
 
-    UIButton *buttonTopRight = [UIButton buttonWithType:UIButtonTypeSystem];
-    buttonTopRight.backgroundColor = [UIColor blueColor];
-    buttonTopRight.alpha = .25;
-    [buttonTopRight setTitle:@"Forward" forState:UIControlStateNormal];
-    [buttonTopRight addTarget:self
-                       action:@selector(buttonPressed:)
-             forControlEvents:UIControlEventTouchUpInside];
-    self.longPress = [[UILongPressGestureRecognizer alloc]
-        initWithTarget:self
-                action:@selector(longPressFired:)];
-    [self addGestureRecognizer:self.longPress];
-    self.forwardButton = buttonTopRight;
-    [self addSubview:self.forwardButton];
+- (void) setupSubviews {
+  [self addSubview:self.backButton];
+  [self addSubview:self.forwardButton];
+  [self addSubview:self.stopButton];
+  [self addSubview:self.refreshButton];
+}
 
-    UIButton *buttonBottomLeft = [UIButton buttonWithType:UIButtonTypeSystem];
-    buttonBottomLeft.backgroundColor = [UIColor greenColor];
-    buttonBottomLeft.alpha = .25;
-    [buttonBottomLeft setTitle:@"Stop" forState:UIControlStateNormal];
-    [buttonBottomLeft addTarget:self
+- (void) setupGestures {
+  UILongPressGestureRecognizer *longPress = [[UILongPressGestureRecognizer alloc]
+                                             initWithTarget:self
+                                             action:@selector(longPressFired:)];
+  [self addGestureRecognizer:longPress];
+  
+  UIPanGestureRecognizer *panGesture =
+  [[UIPanGestureRecognizer alloc] initWithTarget:self
+                                          action:@selector(panFired:)];
+  [self addGestureRecognizer:panGesture];
+  UIPinchGestureRecognizer *pinchGesture =
+  [[UIPinchGestureRecognizer alloc] initWithTarget:self
+                                            action:@selector(pinchFired:)];
+  [self addGestureRecognizer:pinchGesture];
+  
+  
+}
+
+#pragma mark - Lazy Loading
+
+-(UIButton *) refreshButton{
+  if (!_refreshButton){
+    _refreshButton = [UIButton buttonWithType:UIButtonTypeSystem];
+    _refreshButton.backgroundColor = [UIColor yellowColor];
+    _refreshButton.alpha = .25;
+    [_refreshButton setTitle:@"Refresh" forState:UIControlStateNormal];
+    [_refreshButton addTarget:self
+                           action:@selector(buttonPressed:)
+                 forControlEvents:UIControlEventTouchUpInside];
+  }
+  return _refreshButton;
+}
+
+- (UIButton *) stopButton {
+  if (!_stopButton){
+    _stopButton = [UIButton buttonWithType:UIButtonTypeSystem];
+    _stopButton.backgroundColor = [UIColor greenColor];
+    _stopButton.alpha = .25;
+    [_stopButton setTitle:@"Stop" forState:UIControlStateNormal];
+    [_stopButton addTarget:self
+                        action:@selector(buttonPressed:)
+              forControlEvents:UIControlEventTouchUpInside];
+  }
+  return _stopButton;
+}
+
+
+- (UIButton *) forwardButton {
+  if (!_forwardButton){
+  _forwardButton = [UIButton buttonWithType:UIButtonTypeSystem];
+  _forwardButton.backgroundColor = [UIColor blueColor];
+  _forwardButton.alpha = .25;
+  [_forwardButton setTitle:@"Forward" forState:UIControlStateNormal];
+  [_forwardButton addTarget:self
                          action:@selector(buttonPressed:)
                forControlEvents:UIControlEventTouchUpInside];
-    self.longPress = [[UILongPressGestureRecognizer alloc]
-        initWithTarget:self
-                action:@selector(longPressFired:)];
-    [self addGestureRecognizer:self.longPress];
-    self.stopButton = buttonBottomLeft;
-    [self addSubview:self.stopButton];
-
-    UIButton *buttonBottomRight = [UIButton buttonWithType:UIButtonTypeSystem];
-    buttonBottomRight.backgroundColor = [UIColor yellowColor];
-    buttonBottomRight.alpha = .25;
-    [buttonBottomRight setTitle:@"Refresh" forState:UIControlStateNormal];
-    [buttonBottomRight addTarget:self
-                          action:@selector(buttonPressed:)
-                forControlEvents:UIControlEventTouchUpInside];
-    self.longPress = [[UILongPressGestureRecognizer alloc]
-        initWithTarget:self
-                action:@selector(longPressFired:)];
-    [self addGestureRecognizer:self.longPress];
-    self.refreshButton = buttonBottomRight;
-    [self addSubview:self.refreshButton];
-
-    NSArray *buttonsArray = [[NSArray alloc]
-        initWithObjects:buttonTopLeft, buttonTopRight, buttonBottomLeft,
-                        buttonBottomRight, nil];
-
-    self.buttons = buttonsArray;
-
-    NSLog(@"Buttons Array %lu", (unsigned long)buttonsArray.count);
   }
+  return _forwardButton;
+}
 
-  self.panGesture =
-      [[UIPanGestureRecognizer alloc] initWithTarget:self
-                                              action:@selector(panFired:)];
-  [self addGestureRecognizer:self.panGesture];
-  self.pinchGesture =
-      [[UIPinchGestureRecognizer alloc] initWithTarget:self
-                                                action:@selector(pinchFired:)];
-  [self addGestureRecognizer:self.pinchGesture];
-
-  return self;
-
-
+- (UIButton *) backButton {
+  if (!_backButton) {
+    _backButton = [UIButton buttonWithType:UIButtonTypeSystem];
+    _backButton.backgroundColor = [UIColor redColor];
+    _backButton.alpha = .25;
+    [_backButton setTitle:@"Back" forState:UIControlStateNormal];
+    [_backButton addTarget:self
+                        action:@selector(buttonPressed:)
+              forControlEvents:UIControlEventTouchUpInside];
+  }
+  return _backButton;
 }
 
 - (void)layoutSubviews {
@@ -133,6 +136,9 @@
       CGRectMake(labelWidth, labelHeight, labelWidth, labelHeight);
 
 }
+
+#pragma mark - Target/Action
+
 - (void)buttonPressed:(UIButton *)sender {
   UIButton *pressed = sender;
   /// NSString *title = sender.currentTitle;
@@ -143,35 +149,21 @@
   }
 }
 
+#pragma mark - Gesture Recognizers
+
 - (void)longPressFired:(UILongPressGestureRecognizer *)recognizer {
   if (recognizer.state == UIGestureRecognizerStateRecognized) {
-    CGPoint location = [recognizer locationInView:self];
-    NSLog(@"LongPress x %2F LongPress y %2F", location.x, location.y);
-
-    if ((self.backButton.backgroundColor == [UIColor redColor])) {
-      self.backButton.backgroundColor = [UIColor greenColor];
-      self.forwardButton.backgroundColor = [UIColor redColor];
-      self.refreshButton.backgroundColor = [UIColor blueColor];
-      self.stopButton.backgroundColor = [UIColor yellowColor];
-
-    } else if ((self.backButton.backgroundColor == [UIColor greenColor])) {
-      self.backButton.backgroundColor = [UIColor yellowColor];
-      self.forwardButton.backgroundColor = [UIColor greenColor];
-      self.refreshButton.backgroundColor = [UIColor redColor];
-      self.stopButton.backgroundColor = [UIColor blueColor];
-
-    } else if ((self.backButton.backgroundColor == [UIColor yellowColor])) {
-      self.backButton.backgroundColor = [UIColor blueColor];
-      self.forwardButton.backgroundColor = [UIColor yellowColor];
-      self.refreshButton.backgroundColor = [UIColor greenColor];
-      self.stopButton.backgroundColor = [UIColor redColor];
-
-    } else if ((self.backButton.backgroundColor == [UIColor blueColor])) {
-      self.backButton.backgroundColor = [UIColor redColor];
-      self.forwardButton.backgroundColor = [UIColor blueColor];
-      self.refreshButton.backgroundColor = [UIColor yellowColor];
-      self.stopButton.backgroundColor = [UIColor greenColor];
+    
+    NSMutableArray *newColors = [[NSMutableArray alloc] init];
+    for (NSInteger i = 0; i < self.colors.count; ++i) {
+      [newColors addObject:self.colors[(i - 1) % self.colors.count]];
     }
+    
+    self.colors = newColors;
+    
+    [self.buttons enumerateObjectsUsingBlock:^(UIButton *button, NSUInteger idx, BOOL *stop) {
+      button.backgroundColor = self.colors[idx];
+    }];
   }
 }
 
@@ -205,26 +197,13 @@
 
 #pragma mark - Button Enabling
 
-
 - (void)setEnabled:(BOOL)enabled forButtonWithTitle:(NSString *)title {
   NSUInteger index = [self.currentTitles indexOfObject:title];
-
   if (index != NSNotFound) {
-    NSLog(@"ForButtonWith Title %lu", (unsigned long)index);
     UIButton *button = [self.buttons objectAtIndex:index];
-    NSLog(@"ForButtonWith Title buttons %@", self.buttons);
     button.userInteractionEnabled = enabled;
     button.alpha = enabled ? 1.0 : 0.25;
   }
 }
-
-/*
-// Only override drawRect: if you perform custom drawing.
-// An empty implementation adversely affects performance during animation.
-- (void)drawRect:(CGRect)rect
-{
-    // Drawing code
-}
-*/
 
 @end
