@@ -81,7 +81,7 @@
   centerX = width;
   NSLog(@"View Width %2F", width);
   self.awesomeToolbar.frame =
-  CGRectMake(centerX - 140, 100, (280 * 1.01), (60 * 1.01));
+  CGRectMake(20, 100, (280 * 1.01), (60 * 1.01));
 }
 
 - (void)viewWillLayoutSubviews {
