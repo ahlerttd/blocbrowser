@@ -183,11 +183,7 @@
 
 - (void)pinchFired:(UIPinchGestureRecognizer *)recognizer {
   if (recognizer.state == UIGestureRecognizerStateEnded) {
-    CGFloat lastScale = 1.0;
-    CGFloat scale = 1.0 - (lastScale - recognizer.scale);
-
-    NSLog(@"Pinch Scale: %2F", scale);
-
+    CGFloat scale = recognizer.scale;
     if ([self.delegate respondsToSelector:@selector(floatingToolbar:
                                               didTryToPinchWithOffset:)]) {
       [self.delegate floatingToolbar:self didTryToPinchWithOffset:scale];

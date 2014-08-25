@@ -69,12 +69,19 @@
 - (void)viewDidLoad {
   [super viewDidLoad];
   self.edgesForExtendedLayout = UIRectEdgeNone;
-
   self.activityIndicator = [[UIActivityIndicatorView alloc]
       initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
   self.navigationItem.rightBarButtonItem =
       [[UIBarButtonItem alloc] initWithCustomView:self.activityIndicator];
-  // Do any additional setup after loading the view.
+ 
+  
+  // Size Toolbar in View
+  CGFloat width = CGRectGetWidth(self.view.bounds);
+  CGFloat centerX;
+  centerX = width;
+  NSLog(@"View Width %2F", width);
+  self.awesomeToolbar.frame =
+  CGRectMake(centerX - 140, 100, (280 * 1.01), (60 * 1.01));
 }
 
 - (void)viewWillLayoutSubviews {
@@ -85,17 +92,15 @@
   static CGFloat itemHeight = 50;
   CGFloat width = CGRectGetWidth(self.view.bounds);
   CGFloat browserHeight = CGRectGetHeight(self.view.bounds) - itemHeight;
-  NSLog(@"%f", width);
+  NSLog(@"Will Layout Subviews %f", width);
 
-  CGFloat centerX;
-  centerX = width / 2;
+  
 
   self.textField.frame = CGRectMake(0, 0, width, itemHeight);
   self.webview.frame =
       CGRectMake(0, CGRectGetMaxY(self.textField.frame), width, browserHeight);
 
-  self.awesomeToolbar.frame =
-      CGRectMake(centerX - 140, 100, (280 * 1.01), (60 * 1.01));
+  
 }
 
 - (void)resetWebView {
@@ -146,13 +151,14 @@
 
 - (void)floatingToolbar:(BLCAwesomeFloatingToolbar *)toolbar
     didTryToPinchWithOffset:(CGFloat)pinchScale {
-
-
-  NSLog(@"Scale %f", pinchScale);
-
+  
   self.awesomeToolbar.transform = CGAffineTransformScale(
       self.awesomeToolbar.transform, (pinchScale), (pinchScale));
-
+  if (!(CGRectContainsRect(self.webview.bounds, self.awesomeToolbar.frame))){
+    
+    self.awesomeToolbar.transform = CGAffineTransformIdentity;
+  }
+  
 }
 
 #pragma mark - UITextFieldDelegate
