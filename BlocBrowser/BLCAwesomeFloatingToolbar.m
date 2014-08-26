@@ -157,6 +157,7 @@
     NSMutableArray *newColors = [[NSMutableArray alloc] init];
     for (NSInteger i = 0; i < self.colors.count; ++i) {
       [newColors addObject:self.colors[(i - 1) % self.colors.count]];
+     
     }
     
     self.colors = newColors;
@@ -182,11 +183,13 @@
 }
 
 - (void)pinchFired:(UIPinchGestureRecognizer *)recognizer {
-  if (recognizer.state == UIGestureRecognizerStateEnded) {
-    CGFloat scale = recognizer.scale;
+  if (recognizer.state == UIGestureRecognizerStateChanged) {
+    
+
+    
     if ([self.delegate respondsToSelector:@selector(floatingToolbar:
                                               didTryToPinchWithOffset:)]) {
-      [self.delegate floatingToolbar:self didTryToPinchWithOffset:scale];
+      [self.delegate floatingToolbar:self didTryToPinchWithOffset:recognizer.scale];
     }
   }
 }

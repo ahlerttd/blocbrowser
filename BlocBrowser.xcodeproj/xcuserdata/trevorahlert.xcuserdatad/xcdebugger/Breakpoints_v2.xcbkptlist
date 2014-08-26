@@ -10,11 +10,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "BlocBrowser/BLCAwesomeFloatingToolbar.m"
-            timestampString = "430576206.384907"
+            timestampString = "430693420.702756"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "164"
-            endingLineNumber = "164"
+            startingLineNumber = "165"
+            endingLineNumber = "165"
             landmarkName = "-longPressFired:"
             landmarkType = "5">
             <Locations>
@@ -56,11 +56,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "BlocBrowser/BLCWebBrowserViewController.m"
-            timestampString = "430657724.868212"
+            timestampString = "430746805.607226"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "155"
-            endingLineNumber = "155"
+            startingLineNumber = "180"
+            endingLineNumber = "180"
             landmarkName = "-floatingToolbar:didTryToPinchWithOffset:"
             landmarkType = "5">
          </BreakpointContent>

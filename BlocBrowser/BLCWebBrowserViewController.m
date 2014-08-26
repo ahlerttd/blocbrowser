@@ -32,7 +32,7 @@
 #pragma mark - UIViewController
 
 - (void)loadView {
-  UIView *mainView = [UIView new];
+  UIView *mainView = [[UIView alloc] initWithFrame:[UIScreen mainScreen].applicationFrame];
 
   self.webview = [[UIWebView alloc] init];
   self.webview.delegate = self;
@@ -66,6 +66,7 @@
   self.view = mainView;
 }
 
+
 - (void)viewDidLoad {
   [super viewDidLoad];
   self.edgesForExtendedLayout = UIRectEdgeNone;
@@ -78,11 +79,31 @@
   // Size Toolbar in View
   CGFloat width = CGRectGetWidth(self.view.bounds);
   CGFloat centerX;
-  centerX = width;
-  NSLog(@"View Width %2F", width);
+  centerX = width / 2;
   self.awesomeToolbar.frame =
-  CGRectMake(20, 100, (280 * 1.01), (60 * 1.01));
+  CGRectMake(centerX - 140, 100, (280), (60 ));
 }
+
+
+
+- (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation {
+  
+  CGFloat width = CGRectGetWidth(self.view.bounds);
+  CGFloat centerX;
+  centerX = width / 2;
+  
+  if ((fromInterfaceOrientation == UIInterfaceOrientationLandscapeLeft) || (fromInterfaceOrientation == UIInterfaceOrientationLandscapeRight)) {
+  self.awesomeToolbar.frame =
+  CGRectMake(centerX - 140, 100, (280), (60 ));
+  }
+    else if ((fromInterfaceOrientation == UIInterfaceOrientationPortrait) || (fromInterfaceOrientation == UIInterfaceOrientationPortraitUpsideDown)){
+      
+      self.awesomeToolbar.frame =
+      CGRectMake(centerX - 140, 100, (280), (60 ));
+  }
+}
+
+
 
 - (void)viewWillLayoutSubviews {
   [super viewWillLayoutSubviews];
@@ -152,13 +173,18 @@
 - (void)floatingToolbar:(BLCAwesomeFloatingToolbar *)toolbar
     didTryToPinchWithOffset:(CGFloat)pinchScale {
   
-  self.awesomeToolbar.transform = CGAffineTransformScale(
-      self.awesomeToolbar.transform, (pinchScale), (pinchScale));
-  if (!(CGRectContainsRect(self.webview.bounds, self.awesomeToolbar.frame))){
-    
-    self.awesomeToolbar.transform = CGAffineTransformIdentity;
-  }
+  CGFloat pinchX = pinchScale < .95 ? 1.0 : (pinchScale > 1.05 ? 1.0 : pinchScale);
   
+  
+  NSLog(@"Delegate pinchScale %2f", pinchX);
+  self.awesomeToolbar.transform = CGAffineTransformScale(
+      self.awesomeToolbar.transform, (pinchX), (pinchX));
+ /* if (!(CGRectContainsRect(self.webview.bounds, self.awesomeToolbar.frame))){
+    
+    self.awesomeToolbar.transform = CGAffineTransformMake(self.awesomeToolbar.transform.a, self.awesomeToolbar.transform.b, self.awesomeToolbar.transform.c, self.awesomeToolbar.transform.d, self.awesomeToolbar.transform.tx, self.awesomeToolbar.transform.ty);
+    
+  }
+  */
 }
 
 #pragma mark - UITextFieldDelegate
