@@ -173,19 +173,23 @@
 - (void)floatingToolbar:(BLCAwesomeFloatingToolbar *)toolbar
     didTryToPinchWithOffset:(CGFloat)pinchScale {
   
-  CGFloat pinchX = pinchScale < .95 ? 1.0 : (pinchScale > 1.05 ? 1.0 : pinchScale);
+  static const CGFloat kToolbarMinWidth = 140;
+  static const CGFloat kToolbarMinHeight = 30;
   
+  CGAffineTransform transform =
+  CGAffineTransformMakeScale(pinchScale, pinchScale);
   
-  NSLog(@"Delegate pinchScale %2f", pinchX);
-  self.awesomeToolbar.transform = CGAffineTransformScale(
-      self.awesomeToolbar.transform, (pinchX), (pinchX));
- /* if (!(CGRectContainsRect(self.webview.bounds, self.awesomeToolbar.frame))){
-    
-    self.awesomeToolbar.transform = CGAffineTransformMake(self.awesomeToolbar.transform.a, self.awesomeToolbar.transform.b, self.awesomeToolbar.transform.c, self.awesomeToolbar.transform.d, self.awesomeToolbar.transform.tx, self.awesomeToolbar.transform.ty);
-    
+  CGRect possibleNewFrame =
+  CGRectApplyAffineTransform(self.awesomeToolbar.frame, transform);
+  
+  if (CGRectContainsRect(self.view.bounds, possibleNewFrame) &&
+      possibleNewFrame.size.width >= kToolbarMinWidth &&
+      possibleNewFrame.size.height >= kToolbarMinHeight) {
+    self.awesomeToolbar.transform = transform;
   }
-  */
 }
+
+
 
 #pragma mark - UITextFieldDelegate
 
